@@ -31,7 +31,7 @@ export class MainView extends React.Component {
             selectedMovie: newSelectedMovie
         });
     }
-
+s
     render() {
         const { movies, selectedMovie } = this.state;
 
