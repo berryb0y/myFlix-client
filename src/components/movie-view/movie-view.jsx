@@ -18,7 +18,7 @@ export class MovieView extends React.Component {
 
     render() {
         const { movie, onBackClick } = this.props;
-
+// I want to edit this part with a <Container> once I am able to view it
         return (
             <div className='movie-view'>
                 <div className='movie-poster'>
