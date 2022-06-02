@@ -946,40 +946,38 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _client = require("react-dom/client");
 var _clientDefault = parcelHelpers.interopDefault(_client);
 var _mainView = require("./components/main-view/main-view");
-var _container = require("react-bootstrap/Container");
-var _containerDefault = parcelHelpers.interopDefault(_container);
 //import statement to indicate that you need to bundle `./index.scss`
 var _indexScss = require("./index.scss");
 //Main component (will eventually use all others)
 class MyFlixApplication extends _reactDefault.default.Component {
     render() {
-        return(/*#__PURE__*/ _jsxRuntime.jsx(_containerDefault.default, {
+        return(/*#__PURE__*/ _jsxRuntime.jsx(_mainView.MainView, {
             __source: {
                 fileName: "src/index.jsx",
-                lineNumber: 13
+                lineNumber: 12
             },
-            __self: this,
-            children: /*#__PURE__*/ _jsxRuntime.jsx(_mainView.MainView, {
-                __source: {
-                    fileName: "src/index.jsx",
-                    lineNumber: 14
-                },
-                __self: this
-            })
+            __self: this
         }));
     }
 }
 //Find the root of your app
 const container = document.getElementsByClassName('app-container')[0];
 //Tells react to render your app in the root DOM element
-_clientDefault.default.render(/*#__PURE__*/ _reactDefault.default.createElement(MyFlixApplication), container);
+const root = _clientDefault.default.createRoot(container);
+root.render(/*#__PURE__*/ _jsxRuntime.jsx(MyFlixApplication, {
+    __source: {
+        fileName: "src/index.jsx",
+        lineNumber: 22
+    },
+    __self: undefined
+}));
 
   $parcel$ReactRefreshHelpers$b058.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"6TuXu","./index.scss":"jUTZ8","@parcel/transformer-js/src/esmodule-helpers.js":"21Cai","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7d5kY","./components/main-view/main-view":"2zHas","react/jsx-runtime":"8xIwr","react-bootstrap/Container":"2PRIq","react-dom/client":"jdzvJ"}],"6TuXu":[function(require,module,exports) {
+},{"react":"6TuXu","./index.scss":"jUTZ8","@parcel/transformer-js/src/esmodule-helpers.js":"21Cai","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7d5kY","./components/main-view/main-view":"2zHas","react-dom/client":"jdzvJ","react/jsx-runtime":"8xIwr"}],"6TuXu":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
