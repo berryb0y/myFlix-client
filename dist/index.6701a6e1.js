@@ -3045,14 +3045,29 @@ class MainView extends _reactDefault.default.Component {
             user: null
         };
     }
-    componentDidMount() {
-        _axiosDefault.default.get('https://berry-node-api.herokuapp.com/movies').then((response)=>{
+    //https://dashboard.heroku.com/apps/berry-node-api
+    getMovies(token) {
+        _axiosDefault.default.get('https://dashboard.heroku.com/apps/berry-node-api/movies', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response)=>{
+            // Assign the result to the state
             this.setState({
                 movies: response.data
             });
-        }).catch((error)=>{
+        }).catch(function(error) {
             console.log(error);
         });
+    }
+    componentDidMount() {
+        let accessToken = localStorage.getItem('token');
+        if (accessToken !== null) {
+            this.setState({
+                user: localStorage.getItem('user')
+            });
+            this.getMovies(accessToken);
+        }
     }
     //when a movie is clicked, this function updates the state of the selected movie property to that movie
     setSelectedMovie(movie) {
@@ -3061,11 +3076,16 @@ class MainView extends _reactDefault.default.Component {
         });
     }
     //when a user successfully logs in, this function updates the user property in state to that specific user
-    onLoggedIn(user) {
+    onLoggedIn(authData) {
+        console.log(authData);
         this.setState({
-            user
+            user: authData.user.Username
         });
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', authData.user.Username);
+        this.getMovies(authData.token);
     }
+    //function to log out 
     render() {
         const { movies , selectedMovie , user  } = this.state;
         //if no user, the login view will render, if logged in, user details are passed as a prop to the LoginView
@@ -3074,7 +3094,7 @@ class MainView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 51
+                lineNumber: 72
             },
             __self: this
         }));
@@ -3083,7 +3103,7 @@ class MainView extends _reactDefault.default.Component {
             className: "main-view",
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 54
+                lineNumber: 75
             },
             __self: this
         }));
@@ -3091,14 +3111,14 @@ class MainView extends _reactDefault.default.Component {
             className: "main-view justify-content-md-center",
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 57
+                lineNumber: 78
             },
             __self: this,
             children: selectedMovie ? /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Col, {
                 md: 8,
                 __source: {
                     fileName: "src/components/main-view/main-view.jsx",
-                    lineNumber: 60
+                    lineNumber: 81
                 },
                 __self: this,
                 children: /*#__PURE__*/ _jsxRuntime.jsx(_movieView.MovieView, {
@@ -3108,7 +3128,7 @@ class MainView extends _reactDefault.default.Component {
                     },
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 61
+                        lineNumber: 82
                     },
                     __self: this
                 })
@@ -3116,7 +3136,7 @@ class MainView extends _reactDefault.default.Component {
                     md: 3,
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 65
+                        lineNumber: 86
                     },
                     __self: this,
                     children: /*#__PURE__*/ _jsxRuntime.jsx(_movieCard.MovieCard, {
@@ -3126,7 +3146,7 @@ class MainView extends _reactDefault.default.Component {
                         },
                         __source: {
                             fileName: "src/components/main-view/main-view.jsx",
-                            lineNumber: 66
+                            lineNumber: 87
                         },
                         __self: this
                     }, movie._id)
@@ -3227,16 +3247,15 @@ MovieCard.propTypes = {
         Description: _propTypesDefault.default.string.isRequired,
         ImagePath: _propTypesDefault.default.string.isRequired,
         Rating: _propTypesDefault.default.string.isRequired,
-        Actors: _propTypesDefault.default.arrayOf(_propTypesDefault.default.shape({
-            Name: _propTypesDefault.default.string.isRequired
-        })).isRequired,
+        Actors: _propTypesDefault.default.string.isRequired,
         Genre: _propTypesDefault.default.shape({
             Name: _propTypesDefault.default.string.isRequired,
             Description: _propTypesDefault.default.string.isRequired
         }).isRequired
     }).isRequired,
     onMovieClick: _propTypesDefault.default.func.isRequired
-};
+}; // Actors: PropTypes.arrayOf(PropTypes.string({
+ //     Name: PropTypes.string.isRequired
 
   $parcel$ReactRefreshHelpers$4249.postlude(module);
 } finally {
@@ -8651,9 +8670,8 @@ var _jsxRuntime = require("react/jsx-runtime");
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _form = require("react-bootstrap/Form");
-var _formDefault = parcelHelpers.interopDefault(_form);
-var _button = require("react-bootstrap/Button");
-var _buttonDefault = parcelHelpers.interopDefault(_button);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _s = $RefreshSig$();
 function LoginView(props) {
     _s();
@@ -8661,81 +8679,103 @@ function LoginView(props) {
     const [password, setPassword] = _react.useState('');
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log(username, password);
-        //send request to server for authentication
-        //call props.onLoggedIn(username)
-        props.onLoggedIn(username);
+        const isReq = validate();
+        if (isReq) _axiosDefault.default.post('https://berry-node-api.herokuapp.com/login', {
+            Username: username,
+            Password: password
+        }).then((response)=>{
+            const data = response.data;
+            props.onLoggedIn(data);
+        }).catch((e1)=>{
+            console.log('no such user');
+        });
     };
-    return(/*#__PURE__*/ _jsxRuntime.jsxs(_formDefault.default, {
+    return(/*#__PURE__*/ _jsxRuntime.jsxs(_form.Form, {
+        className: "form-login",
         __source: {
             fileName: "src/components/login-view/login-view.jsx",
-            lineNumber: 18
+            lineNumber: 30
         },
         __self: this,
         children: [
-            /*#__PURE__*/ _jsxRuntime.jsxs(_formDefault.default.Group, {
+            /*#__PURE__*/ _jsxRuntime.jsx("img", {
+                src: "img/banner.png",
+                __source: {
+                    fileName: "src/components/login-view/login-view.jsx",
+                    lineNumber: 31
+                },
+                __self: this
+            }),
+            /*#__PURE__*/ _jsxRuntime.jsxs(_form.Form.Group, {
                 controlId: "formUsername",
                 __source: {
                     fileName: "src/components/login-view/login-view.jsx",
-                    lineNumber: 19
+                    lineNumber: 32
                 },
                 __self: this,
                 children: [
-                    /*#__PURE__*/ _jsxRuntime.jsx(_formDefault.default.Label, {
+                    /*#__PURE__*/ _jsxRuntime.jsx(_form.Form.Label, {
                         __source: {
                             fileName: "src/components/login-view/login-view.jsx",
-                            lineNumber: 20
+                            lineNumber: 33
                         },
                         __self: this,
                         children: "Username:"
                     }),
-                    /*#__PURE__*/ _jsxRuntime.jsx(_formDefault.default.Control, {
+                    /*#__PURE__*/ _jsxRuntime.jsx(_form.Form.Control, {
                         type: "text",
                         onChange: (e)=>setUsername(e.target.value)
                         ,
                         __source: {
                             fileName: "src/components/login-view/login-view.jsx",
-                            lineNumber: 21
+                            lineNumber: 34
                         },
                         __self: this
                     })
                 ]
             }),
-            /*#__PURE__*/ _jsxRuntime.jsxs(_formDefault.default.Group, {
+            /*#__PURE__*/ _jsxRuntime.jsxs(_form.Form.Group, {
                 controlId: "formPassword",
                 __source: {
                     fileName: "src/components/login-view/login-view.jsx",
-                    lineNumber: 24
+                    lineNumber: 37
                 },
                 __self: this,
                 children: [
-                    /*#__PURE__*/ _jsxRuntime.jsx(_formDefault.default.Label, {
+                    /*#__PURE__*/ _jsxRuntime.jsx(_form.Form.Label, {
                         __source: {
                             fileName: "src/components/login-view/login-view.jsx",
-                            lineNumber: 25
+                            lineNumber: 38
                         },
                         __self: this,
                         children: "Password:"
                     }),
-                    /*#__PURE__*/ _jsxRuntime.jsx(_formDefault.default.Control, {
+                    /*#__PURE__*/ _jsxRuntime.jsx(_form.Form.Control, {
                         type: "password",
                         onChange: (e)=>setPassword(e.target.value)
                         ,
                         __source: {
                             fileName: "src/components/login-view/login-view.jsx",
-                            lineNumber: 26
+                            lineNumber: 39
                         },
                         __self: this
                     })
                 ]
             }),
-            /*#__PURE__*/ _jsxRuntime.jsx(_buttonDefault.default, {
+            /*#__PURE__*/ _jsxRuntime.jsx("br", {
+                __source: {
+                    fileName: "src/components/login-view/login-view.jsx",
+                    lineNumber: 41
+                },
+                __self: this
+            }),
+            /*#__PURE__*/ _jsxRuntime.jsx(_form.Button, {
                 variant: "primary",
                 type: "submit",
                 onClick: handleSubmit,
                 __source: {
                     fileName: "src/components/login-view/login-view.jsx",
-                    lineNumber: 28
+                    lineNumber: 42
                 },
                 __self: this,
                 children: "Submit"
@@ -8753,7 +8793,7 @@ $RefreshReg$(_c, "LoginView");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"6TuXu","@parcel/transformer-js/src/esmodule-helpers.js":"21Cai","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7d5kY","react/jsx-runtime":"8xIwr","react-bootstrap/Form":"5ykgY","react-bootstrap/Button":"9CzHT"}],"5ykgY":[function(require,module,exports) {
+},{"react":"6TuXu","@parcel/transformer-js/src/esmodule-helpers.js":"21Cai","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7d5kY","react/jsx-runtime":"8xIwr","react-bootstrap/Form":"5ykgY","axios":"iYoWk"}],"5ykgY":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");

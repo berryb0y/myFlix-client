@@ -1,0 +1,12 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+}
+/*# sourceMappingURL=index.1d334ea1.css.map */
