@@ -23,7 +23,7 @@ export class MainView extends React.Component {
 
     //https://dashboard.heroku.com/apps/berry-node-api
     getMovies(token) {
-      axios.get('https://dashboard.heroku.com/apps/berry-node-api/movies', {
+      axios.get('https://berry-node-api.herokuapp.com/movies', {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(response => {
@@ -79,12 +79,12 @@ export class MainView extends React.Component {
         const { movies, user } = this.state;
 
         //if no user, the login view will render, if logged in, user details are passed as a prop to the LoginView
-        if (!user) return 
-        <Row>
-          <Col>
-          <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-          </Col>
-        </Row>
+        // if (!user) return 
+        // <Row>
+        //   <Col>
+        //   <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+        //   </Col>
+        // </Row>
 
         //before movies have been loaded
         if (movies.length === 0) return <div className="main-view"></div>;

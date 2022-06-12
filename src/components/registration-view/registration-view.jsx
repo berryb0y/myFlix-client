@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Form, Row, Col, FormGroup, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export function RegistrationView(props) {
     const [ username, setUsername ] = useState('');
@@ -75,19 +76,16 @@ export function RegistrationView(props) {
                     <Form.Group controlId="formUsername" className="reg-form-inputs">
                         <Form.Label>Username:</Form.Label>
                         <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} />
-                        {values.usernameErr && <p>{values.usernameErr}</p>}
                     </Form.Group>
 
                     <Form.Group controlId="formPassword" className="reg-form-inputs">
                         <Form.Label>Password:</Form.Label>
                         <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
-                        {values.passwordErr && <p>{values.passwordErr}</p>}
                     </Form.Group>
 
                     <Form.Group controlId="formEmail" className="reg-form-inputs">
                         <Form.Label>Email:</Form.Label>
                         <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} />
-                        {values.emailErr && <p>{values.emailErr}</p>}
                     </Form.Group>
 
                     <Form.Group controlId="updateBirthday">

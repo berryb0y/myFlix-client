@@ -1,4 +1,16 @@
 .my-flix {
   color: steelblue;
 }
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+}
 /*# sourceMappingURL=index.caa67093.css.map */
