@@ -75,17 +75,17 @@ export function RegistrationView(props) {
                     <p></p>
                     <Form.Group controlId="formUsername" className="reg-form-inputs">
                         <Form.Label>Username:</Form.Label>
-                        <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                        <Form.Control type="text" placeholder="username" value={username} onChange={e => setUsername(e.target.value)} required />
                     </Form.Group>
 
                     <Form.Group controlId="formPassword" className="reg-form-inputs">
                         <Form.Label>Password:</Form.Label>
-                        <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                        <Form.Control type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} required minLength="5" />
                     </Form.Group>
 
                     <Form.Group controlId="formEmail" className="reg-form-inputs">
                         <Form.Label>Email:</Form.Label>
-                        <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                        <Form.Control type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)} />
                     </Form.Group>
 
                     <Form.Group controlId="updateBirthday">
@@ -102,10 +102,10 @@ export function RegistrationView(props) {
     );
 }
 
-RegistrationView.propTypes = {
-    register: PropTypes.shape({
-        Userame: PropTypes.string.isRequired,
-        Password: PropTypes.string.isRequired,
-        Email: PropTypes.string.isRequired
-    }),
-};
+// RegistrationView.propTypes = {
+//     register: PropTypes.shape({
+//         Userame: PropTypes.string.isRequired,
+//         Password: PropTypes.string.isRequired,
+//         Email: PropTypes.string.isRequired
+//     }),
+// };

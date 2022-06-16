@@ -1,58 +1,76 @@
 import React from 'react';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+// #0
+import { setMovies } from '../../actions/actions';
+
+import MoviesList from '../movies-list/movies-list';
+
+
+
+
 
 import { RegistrationView } from '../registration-view/registration-view';
 import { LoginView } from '../login-view/login-view';
-import { MovieCard } from '../movie-card/movie-card';
+// 6/16 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+import { Menubar } from '../navbar/navbar';
+import { GenreView } from '../genre-view/genre-view';
+import { DirectorView } from '../director-view/director-view';
 import { Col, Row } from 'react-bootstrap';
 
-export class MainView extends React.Component {
+class MainView extends React.Component {
 
-    constructor(){
-        super();
-        //initial state set to null
-        this.state = {
-            movies: [],
-            selectedMovie: null,
-            user: null
-        };
-    }
+  constructor(){
+      super();
+      //initial state set to null
+      this.state = {
+          user: null
+      };
+  }
 
-    //https://dashboard.heroku.com/apps/berry-node-api
-    getMovies(token) {
-      axios.get('https://berry-node-api.herokuapp.com/movies', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => {
-          // Assign the result to the state
-          this.setState({
-            movies: response.data
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+  componentDidMount(){
+    let accessToken = localStorage.getItem('token');
+    if (accessToken !==  null) {
+      this.setState({
+        user: localStorage.getItem('user')
+      });
+      this.getMovies(accessToken);
     }
-
-    componentDidMount(){
-        let accessToken = localStorage.getItem('token');
-        if (accessToken !==  null) {
-          this.setState({
-            user: localStorage.getItem('user')
-          });
-          this.getMovies(accessToken);
-        }
-    }
+  }
 
     //when a movie is clicked, this function updates the state of the selected movie property to that movie
-    setSelectedMovie(movie) {
-        this.setState({
-            selectedMovie: movie
-        });
-    }
+  setSelectedMovie(movie) {
+    this.setState({
+        selectedMovie: movie
+    });
+  }
+
+  //https://dashboard.heroku.com/apps/berry-node-api
+  getMovies(token) {
+    axios.get('https://berry-node-api.herokuapp.com/movies', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(response => {
+      // Assign the result to the state
+
+      // 6/16 this.setState({
+      //   movies: response.data
+      // });
+      this.props.setMovies(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+    
+
+
 
     //when a user successfully logs in, this function updates the user property in state to that specific user
     onLoggedIn(authData) {
@@ -76,7 +94,10 @@ export class MainView extends React.Component {
     }
 
     render() {
-        const { movies, user } = this.state;
+        // 6/16 const { movies, user } = this.state;
+
+        let { movies } = this.props;
+        let { user } = this.state;
 
         //if no user, the login view will render, if logged in, user details are passed as a prop to the LoginView
         // if (!user) return 
@@ -87,7 +108,7 @@ export class MainView extends React.Component {
         // </Row>
 
         //before movies have been loaded
-        if (movies.length === 0) return <div className="main-view"></div>;
+        // if (movies.length === 0) return <div className="main-view"></div>;
 
         return (
           <Router>
@@ -97,11 +118,7 @@ export class MainView extends React.Component {
                   <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                   </Col>
                 if (movies.length === 0) return <div className="main-view"></div>
-                return movies.map(m => (
-                  <Col md={3} key={m._id}>
-                    <MovieCard movie={m} />
-                  </Col>
-                ))
+                return <MoviesList movies={movies}/>;
               }} />
               <Route path="/register" render={() => {
                 if (user) return <Redirect to="/" />
@@ -125,7 +142,7 @@ export class MainView extends React.Component {
                 </Col>
                 if (movies.length === 0) return <div className="main-view" />;
                 return <Col md={8}>
-                  <DirectorView director={movies.find(m => m.Director.Name === match.params.name).Director} onBackClick={() => history.goBack()} />
+                <DirectorView director={movies.find(m => m.Director.Name === match.params.name ).Director} onBackClick={() => history.goBack()}/>
                 </Col>
               }} />
               <Route path="/genres/:name" render={({ match }) => {
@@ -143,9 +160,16 @@ export class MainView extends React.Component {
                 <ProfileView user={user} onBackClick={() => history.goBack()}/>
                 </Col>
               }} />
-              <button onClick={() => { this.onLoggedOut() }}>Logout</button>
+              {/* <button onClick={() => { this.onLoggedOut() }}>Logout</button> */}
             </Row>
           </Router>
         );
   }
 }
+
+let mapStateToProps = state => {
+  return { movies: state.movies }
+}
+
+export default connect(mapStateToProps, { setMovies } )(MainView);
+// 6/16 export default MainView;

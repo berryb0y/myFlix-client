@@ -2,6 +2,8 @@ import React from 'React';
 import PropTypes from 'prop-types';
 import { Row, Button, Col, Container } from 'react-bootstrap';
 
+import './director-view.scss';
+
 export class DirectorView extends React.Component {
     render() {
         const { director, onBackClick } = this.props;
@@ -22,7 +24,7 @@ export class DirectorView extends React.Component {
                 </Row>
                 <Button onClick={() => { onBackClick(null); }}>Back</Button>                
             </Container>
-        );
+        )
     }
 }
 
