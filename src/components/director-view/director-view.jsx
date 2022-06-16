@@ -1,6 +1,6 @@
 import React from 'React';
 import PropTypes from 'prop-types';
-import { Row, Button, Col, Container } from 'react-bootstrap';
+import { Row, Button, Col, Container, Card } from 'react-bootstrap';
 
 import './director-view.scss';
 
@@ -11,6 +11,17 @@ export class DirectorView extends React.Component {
         return (
             <Container>
                 <Row className="mt-3">
+                <Col>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title> {director?.Name} </Card.Title>
+                            <Card.Text>Born: {director?.Birth} </Card.Text>
+                            <Card.Text>About: {director?.Bio} </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                </Row>
+                {/* <Row className="mt-3">
                     <Col className="label">Director: </Col>
                     <Col className="value">{director.Director.Name}</Col>
                 </Row>
@@ -21,7 +32,7 @@ export class DirectorView extends React.Component {
                 <Row className="mt-3">
                     <Col className="label">Birth: </Col>
                     <Col className="value">{director.Director.Birth}</Col>
-                </Row>
+                </Row> */}
                 <Button onClick={() => { onBackClick(null); }}>Back</Button>                
             </Container>
         )
@@ -33,5 +44,6 @@ DirectorView.propTypes = {
         Name: PropTypes.string.isRequired,
         Bio: PropTypes.string.isRequired,
         Birth: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    onBackClick: PropTypes.func.isRequired
 };
