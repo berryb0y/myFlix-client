@@ -126,17 +126,17 @@ class MainView extends React.Component {
                   <RegistrationView />
                 </Col>
               }} />
-              <Route path="/movies/:movieId" render={({ match }) => {
+              <Route path="/movies/:movieId" render={({ match, history }) => {
                 if (!user) return <Col>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                 </Col>
                 if (movies.length === 0) return <div className="main-view" />;
                 return <Col md={8}>
-                  <MovieView movie={movies.find(m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
+                  <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                 </Col>
                 
               }} />
-              <Route path="/directors/:name" render={({ match }) => {
+              <Route path="/directors/:name" render={({ match, history }) => {
                 if (!user) return <Col>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                 </Col>
@@ -145,7 +145,7 @@ class MainView extends React.Component {
                 <DirectorView director={movies.find(m => m.Director.Name === match.params.name ).Director} onBackClick={() => history.goBack()}/>
                 </Col>
               }} />
-              <Route path="/genres/:name" render={({ match }) => {
+              <Route path="/genres/:name" render={({ match, history }) => {
                 if (!user) return <Col>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                 </Col>

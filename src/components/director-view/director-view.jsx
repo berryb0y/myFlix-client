@@ -11,28 +11,16 @@ export class DirectorView extends React.Component {
         return (
             <Container>
                 <Row className="mt-3">
-                <Col>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title> {director?.Name} </Card.Title>
-                            <Card.Text>Born: {director?.Birth} </Card.Text>
-                            <Card.Text>About: {director?.Bio} </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title> {director?.Name} </Card.Title>
+                                <Card.Text>Born: {director?.Birth} </Card.Text>
+                                <Card.Text>About: {director?.Bio} </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
                 </Row>
-                {/* <Row className="mt-3">
-                    <Col className="label">Director: </Col>
-                    <Col className="value">{director.Director.Name}</Col>
-                </Row>
-                <Row className="mt-3">
-                    <Col className="label">Bio: </Col>
-                    <Col className="value">{director.Director.Bio}</Col>
-                </Row>
-                <Row className="mt-3">
-                    <Col className="label">Birth: </Col>
-                    <Col className="value">{director.Director.Birth}</Col>
-                </Row> */}
                 <Button onClick={() => { onBackClick(null); }}>Back</Button>                
             </Container>
         )
